@@ -1,237 +1,265 @@
-# @creuto/react-native-app-splash
+# @creuto/react-native-image-uploader
 
-<p align="center">
-  <a href="https://creuto.com">
-    <img src="https://img.shields.io/badge/Powered%20By-Creuto-0066FF?style=for-the-badge&logo=react&logoColor=white" alt="Creuto Product Engineering" />
-  </a>
-  <img src="https://img.shields.io/npm/v/@creuto/react-native-app-splash?style=for-the-badge&color=00C853" alt="NPM Version" />
-  <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="License" />
-  <img src="https://img.shields.io/badge/platforms-Android%20%7C%20iOS-orange?style=for-the-badge" alt="Platforms" />
-  <img src="https://img.shields.io/badge/TypeScript-Strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript Strict" />
-</p>
+> The ultimate production-grade React Native image picker, camera capture, preview, reordering, validation, and preparation library for iOS and Android.
 
-> **High-performance, zero-flicker native splash screen solution for React Native applications by [Creuto](https://creuto.com).**
+`@creuto/react-native-image-uploader` provides an all-in-one, highly customizable solution for selecting photos from the device gallery or capturing photos with the camera, displaying responsive thumbnail previews, validating image sizes and file types, and compressing images locally.
 
-`@creuto/react-native-app-splash` provides a lightweight, bulletproof native splash screen controller for React Native on Android (including Android 12+ Splash APIs) and iOS. The native launch screen appears instantly on app cold start and remains frozen until your JavaScript application finishes initialization and invokes `BootSplash.hide()`.
+Zero backend vendor lock-in. Works seamlessly with any API, server, GraphQL, AWS S3, Cloudinary, Firebase, Supabase, or custom backend.
 
 ---
 
-## 📌 Table of Contents
+## Why Choose `@creuto/react-native-image-uploader`?
 
-- [Why `@creuto/react-native-app-splash`?](#-why-creuto-react-native-app-splash)
-- [Feature Comparison](#-feature-comparison)
-- [Key Features](#-key-features)
-- [Installation](#-installation)
-  - [iOS Setup](#ios-setup)
-  - [Android Setup](#android-setup)
-- [Usage & Examples](#-usage--examples)
-  - [Basic Initialization](#basic-initialization)
-  - [React Navigation Integration](#react-navigation-integration)
-- [API Reference](#-api-reference)
-  - [`BootSplash.hide()`](#bootsplashhide)
-  - [`BootSplash.show()`](#bootsplashshow)
-  - [`BootSplash.isVisible()`](#bootsplashisvisible)
-  - [`BootSplash.getVisibilityStatus()`](#bootsplashgetvisibilitystatus)
-- [Platform Support & Requirements](#-platform-support--requirements)
-- [Troubleshooting](#-troubleshooting)
-- [About Creuto](#-about-creuto)
-- [License](#-license)
-
----
-
-## ⚡ Why `@creuto/react-native-app-splash`?
-
-During React Native application startup, there is an unavoidable delay while the JS engine initializes, parses the JavaScript bundle, and builds the initial React component tree. Without a native splash screen controller:
-
-1. **White or Black Flash**: Users see a jarring white or black blank screen before React renders.
-2. **Layout Jumps**: Images, custom fonts, and async state load asynchronously, causing UI shifts.
-3. **Unprofessional UX**: The user experience feels sluggish and incomplete.
-
-`@creuto/react-native-app-splash` fixes startup UX by seamlessly delegating launch screen dismissal to your JavaScript initialization logic.
-
----
-
-## 📊 Feature Comparison
-
-| Feature | `@creuto/react-native-app-splash` | Default RN Startup | Pure JS Overlays |
+| Feature | `@creuto/react-native-image-uploader` | `react-native-image-crop-picker` | `expo-image-picker` |
 | :--- | :---: | :---: | :---: |
-| **Instant Native Launch Screen** | ✅ **YES** | ❌ No | ❌ No |
-| **Zero White/Black Screen Flash** | ✅ **YES** | ❌ No | ❌ No |
-| **Android 12+ SplashScreen API** | ✅ **YES** | ❌ No | ❌ No |
-| **iOS KeyWindow Dismissal** | ✅ **YES** | ❌ No | ❌ No |
-| **Idempotent / Crash-Proof** | ✅ **YES** | N/A | ❌ No |
-| **Zero External Dependencies** | ✅ **YES** | ✅ Yes | ❌ No |
-| **Strict TypeScript Support** | ✅ **YES** | ❌ No | ⚠️ Partial |
+| Built-in Preview UI Grid | Yes | No | No |
+| Integrated Image Removal | Yes | No | No |
+| Image Reordering Support | Yes | No | No |
+| Local Validation (Size, Types, Dims) | Yes | Partial | No |
+| Camera & Gallery Picker | Yes | Yes | Yes |
+| Local Compression | Yes | Yes | Yes |
+| Accessible Screen-Reader Ready | Yes | No | Partial |
+| Zero Backend Lock-in | 100% Local | 100% Local | 100% Local |
+| Strict TypeScript Declarations | Native | Community | Community |
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-- 📱 **Native Launch Control**: Android (Kotlin) & iOS (Objective-C/Swift) native modules.
-- 🎨 **Android 12+ API Compatibility**: Fully supports modern Android splash window standards.
-- 🛡️ **Thread-Safe & Crash-Proof**: Safe to call `hide()` or `show()` repeatedly without race conditions or app crashes.
-- ⚡ **Zero Heavy Dependencies**: Pure lightweight native bridge implementation.
-- 🔷 **100% Strict TypeScript**: Exported typings with strict type checking.
+- Photo Gallery and Camera Selection: Single or multi-image selection from device gallery or native camera.
+- Thumbnail Preview Grid: Ready-to-use thumbnail previews with remove buttons.
+- Position Reordering: Move images left/right or reorder array positions easily.
+- Comprehensive Local Validation:
+  - `maxImages`: Enforce maximum allowed photo count.
+  - `maxFileSize`: Limit file size in bytes (e.g. 5 MB).
+  - `allowedTypes`: Filter by MIME type (JPEG, PNG, WebP, GIF, HEIC).
+  - `maxWidth` and `maxHeight`: Validate image resolution dimensions.
+  - `customValidator`: Async or sync custom validation logic.
+- Configurable Compression: Compress images locally on-device using `compressionQuality`.
+- Flexible Styling and Custom Render Props: Customize built-in components or replace with your own UI elements.
+- Full Accessibility: Built with `accessibilityRole`, `accessibilityLabel`, and WCAG compliant touch targets.
+- Standalone Programmatic API: Use `pickImages()`, `pickImage()`, `takePhoto()`, and `validateImage()` directly in utility code.
 
 ---
 
-## 📦 Installation
+## Installation
 
 ```bash
-# Using npm
-npm install @creuto/react-native-app-splash
-
-# Using yarn
-yarn add @creuto/react-native-app-splash
+npm install @creuto/react-native-image-uploader react-native-image-picker
+# or with yarn
+yarn add @creuto/react-native-image-uploader react-native-image-picker
 ```
 
-### iOS Setup
-For iOS, install CocoaPods dependencies:
+### Peer Dependencies
+
+Ensure `react-native-image-picker` is present in your project:
+
+```json
+"peerDependencies": {
+  "react": ">=17.0.0",
+  "react-native": ">=0.68.0",
+  "react-native-image-picker": ">=4.0.0"
+}
+```
+
+---
+
+## Platform Configuration
+
+### iOS Configuration (`ios/YourAppName/Info.plist`)
+
+Add the required permissions to your `Info.plist`:
+
+```xml
+<!-- Photo Library Usage -->
+<key>NSPhotoLibraryUsageDescription</key>
+<string>This app requires access to your photo library to let you select photos for upload.</string>
+
+<!-- Camera Usage -->
+<key>NSCameraUsageDescription</key>
+<string>This app requires access to your camera to capture new photos for upload.</string>
+```
+
+Then install Cocoapods:
 
 ```bash
 cd ios && pod install && cd ..
 ```
 
-### Android Setup
-React Native autolinks native modules automatically on Android (`compileSdkVersion >= 34` recommended).
+### Android Configuration (`android/app/src/main/AndroidManifest.xml`)
+
+Add permissions to `AndroidManifest.xml`:
+
+```xml
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+```
 
 ---
 
-## 🚀 Usage & Examples
+## Quick Start Example
 
-### Basic Initialization
+```tsx
+import React, { useState } from 'react';
+import { View, StyleSheet, Button, Alert } from 'react-native';
+import { ImageUploader, SelectedImage } from '@creuto/react-native-image-uploader';
 
-Import `BootSplash` and trigger `hide()` inside your root component's `useEffect`:
+export default function CreatePostScreen() {
+  const [images, setImages] = useState<SelectedImage[]>([]);
 
-```typescript
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import BootSplash from '@creuto/react-native-app-splash';
+  const handlePublish = async () => {
+    const formData = new FormData();
+    images.forEach((image) => {
+      formData.append('images', {
+        uri: image.uri,
+        name: image.fileName || image.name,
+        type: image.type || 'image/jpeg',
+      } as any);
+    });
 
-export default function App() {
-  useEffect(() => {
-    async function initApp() {
-      try {
-        // Perform app startup work (hydrate state, fetch auth token, pre-cache resources)
-        await loadInitialAppData();
-      } finally {
-        // Smoothly dismiss native splash screen once initial UI is ready
-        await BootSplash.hide();
-      }
-    }
+    // Post to your application API
+    await fetch('https://api.yourdomain.com/posts', {
+      method: 'POST',
+      body: formData,
+    });
 
-    initApp();
-  }, []);
+    Alert.alert('Success', 'Post published successfully!');
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Welcome to your React Native App!</Text>
+      <ImageUploader
+        images={images}
+        onChange={setImages}
+        maxImages={5}
+        maxFileSize={5 * 1024 * 1024} // 5 MB
+        allowedTypes={['image/jpeg', 'image/png', 'image/webp']}
+        compressionQuality={0.8}
+        source="both"
+        allowReorder
+      />
+
+      <Button
+        title="Publish Post"
+        onPress={handlePublish}
+        disabled={images.length === 0}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-  },
-  text: {
-    fontSize: 18,
-    color: '#1A202C',
+    padding: 16,
   },
 });
 ```
 
-### React Navigation Integration
+---
+
+## Component API Documentation
+
+### `<ImageUploader />` Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `images` | `SelectedImage[]` | `undefined` | Controlled images array. |
+| `defaultImages` | `SelectedImage[]` | `[]` | Initial images array for uncontrolled usage. |
+| `onChange` | `(images: SelectedImage[]) => void` | `undefined` | Triggered when selected images change. |
+| `onSelect` | `(images: SelectedImage[]) => void` | `undefined` | Triggered when new images are added. |
+| `onRemove` | `(image: SelectedImage, index: number) => void` | `undefined` | Triggered when an image is removed. |
+| `onError` | `(error: ImageUploaderError) => void` | `undefined` | Fired when validation or picking fails. |
+| `onPermissionDenied` | `(source: ImagePickerSource) => void` | `undefined` | Fired when camera/gallery permission is denied. |
+| `source` | `'gallery' \| 'camera' \| 'both'` | `'both'` | Source selector type. |
+| `maxImages` | `number` | `undefined` | Maximum count of images allowed. |
+| `maxFileSize` | `number` | `undefined` | Maximum file size limit in bytes. |
+| `allowedTypes` | `string[]` | `undefined` | Array of allowed MIME types (e.g. `['image/jpeg', 'image/png']`). |
+| `maxWidth` | `number` | `undefined` | Maximum allowed width in pixels. |
+| `maxHeight` | `number` | `undefined` | Maximum allowed height in pixels. |
+| `compressionQuality` | `number` | `0.8` | Compression quality scale from `0.0` to `1.0`. |
+| `allowReorder` | `boolean` | `false` | Enables position move buttons on thumbnails. |
+| `disabled` | `boolean` | `false` | Disables picker interactions. |
+| `containerStyle` | `StyleProp<ViewStyle>` | `undefined` | Container container style. |
+| `imageStyle` | `StyleProp<ImageStyle>` | `undefined` | Thumbnail image style. |
+| `thumbnailStyle` | `StyleProp<ViewStyle>` | `undefined` | Thumbnail card container style. |
+| `addButtonStyle` | `StyleProp<ViewStyle>` | `undefined` | Add photo button style. |
+| `removeButtonStyle` | `StyleProp<ViewStyle>` | `undefined` | Remove button style. |
+| `renderAddButton` | `(props: RenderAddButtonProps) => ReactNode` | `undefined` | Custom render function for add button. |
+| `renderImage` | `(props: RenderImageProps) => ReactNode` | `undefined` | Custom render function for image preview. |
+| `renderRemoveButton` | `(props: RenderRemoveButtonProps) => ReactNode` | `undefined` | Custom render function for remove button. |
+| `renderError` | `(props: RenderErrorProps) => ReactNode` | `undefined` | Custom render function for error banner. |
+
+---
+
+## Programmatic Utility API
+
+Need to launch pickers without the UI component? Use exported utility functions:
 
 ```typescript
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import BootSplash from '@creuto/react-native-app-splash';
+import { pickImages, pickImage, takePhoto, validateImage } from '@creuto/react-native-image-uploader';
 
-export default function AppNavigation() {
-  return (
-    <NavigationContainer
-      onReady={async () => {
-        // Hide splash screen as soon as navigation container is mounted and ready
-        await BootSplash.hide();
-      }}
-    >
-      {/* App Screens */}
-    </NavigationContainer>
-  );
-}
+// Pick multiple images from gallery
+const photos = await pickImages({
+  maxImages: 4,
+  maxFileSize: 5 * 1024 * 1024,
+  quality: 0.8,
+});
+
+// Take a single picture using camera
+const photo = await takePhoto({
+  maxWidth: 1920,
+  maxHeight: 1080,
+  quality: 0.9,
+});
+
+// Validate image object programmatically
+const validationError = await validateImage(photo, {
+  allowedTypes: ['image/jpeg', 'image/png'],
+});
 ```
 
 ---
 
-## 📖 API Reference
+## Standardized Error Handling
 
-### `BootSplash.hide(): Promise<boolean>`
-Dismisses the native launch splash screen with a smooth fade animation.
-- **Returns**: `Promise<boolean>` resolving to `true` if successful.
-- **Safety**: Idempotent and thread-safe. Multiple calls will resolve safely without error.
+Errors are typed instances of `ImageUploaderError`:
 
 ```typescript
-await BootSplash.hide();
-```
-
-### `BootSplash.show(): Promise<boolean>`
-Displays the native splash screen overlay.
-- **Returns**: `Promise<boolean>` resolving to `true` if successful.
-
-```typescript
-await BootSplash.show();
-```
-
-### `BootSplash.isVisible(): Promise<boolean>`
-Queries whether the native splash screen is currently active or transitioning.
-
-```typescript
-const isVisible = await BootSplash.isVisible();
-```
-
-### `BootSplash.getVisibilityStatus(): Promise<VisibilityStatus>`
-Returns the current visibility state: `'visible' | 'hidden' | 'transitioning'`.
-
-```typescript
-const status = await BootSplash.getVisibilityStatus();
+export type ImageUploaderErrorCode =
+  | 'IMAGE_LIMIT_EXCEEDED'
+  | 'FILE_TOO_LARGE'
+  | 'INVALID_FILE_TYPE'
+  | 'INVALID_IMAGE_DIMENSIONS'
+  | 'PERMISSION_DENIED'
+  | 'CAMERA_UNAVAILABLE'
+  | 'PICKER_CANCELLED'
+  | 'COMPRESSION_FAILED'
+  | 'UNKNOWN_ERROR';
 ```
 
 ---
 
-## 🛠️ Platform Support & Requirements
+## Testing and Quality Assurance
 
-- **React Native**: `>= 0.68.0`
-- **React**: `>= 17.0.0`
-- **iOS Target**: `>= 11.0`
-- **Android SDK**: `minSdkVersion >= 21`, `compileSdkVersion >= 34`
+```bash
+# Typecheck TypeScript declarations
+npm run typecheck
 
----
+# ESLint and Prettier checks
+npm run lint
+npm run format:check
 
-## 🔍 Troubleshooting
+# Run Jest unit tests
+npm test
 
-### Native Module Missing / Linking Warning
-If you see `The package '@creuto/react-native-app-splash' doesn't seem to be linked`:
-1. Rebuild the app native binary:
-   - Android: `npx react-native run-android`
-   - iOS: `cd ios && pod install && cd .. && npx react-native run-ios`
-2. Ensure you are running on a mobile simulator/device (not Web/SSR).
-
----
-
-## 🏢 About Creuto
-
-**[Creuto](https://creuto.com)** is a premier product engineering and software development company specializing in high-performance mobile applications, adaptive software systems, and AI-driven solutions.
-
-- 🌐 **Website**: [creuto.com](https://creuto.com)
-- 💼 **Custom Development**: Have a mobile or web application project? Reach out to our team at [Creuto](https://creuto.com).
-- 📦 **Open Source**: Discover more Creuto packages on [GitHub](https://github.com/Creuto).
+# Build production distribution bundle
+npm run build
+```
 
 ---
 
-## 📄 License
+## License
 
-MIT © [Creuto](https://creuto.com)
+MIT License © Creuto

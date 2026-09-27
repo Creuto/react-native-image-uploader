@@ -1,7 +1,7 @@
 {
-  "name": "@creuto/react-native-app-splash",
+  "name": "@creuto/react-native-image-uploader",
   "version": "0.1.0",
-  "description": "High-performance, lightweight native splash screen solution for React Native apps by Creuto. Seamless Android 12+ and iOS launch screen control with zero flicker.",
+  "description": "Powerful, customizable React Native image picker, camera capture, preview, reordering, validation, and local compression library for iOS and Android. High-performance alternative to react-native-image-crop-picker and expo-image-picker.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -15,11 +15,6 @@
   "files": [
     "dist",
     "src",
-    "android",
-    "!android/.gradle",
-    "!android/build",
-    "ios",
-    "RNAppSplash.podspec",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
@@ -35,7 +30,8 @@
   },
   "peerDependencies": {
     "react": ">=17.0.0",
-    "react-native": ">=0.68.0"
+    "react-native": ">=0.68.0",
+    "react-native-image-picker": ">=4.0.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.26.9",
@@ -55,27 +51,35 @@
     "prettier": "^3.2.5",
     "react": "18.2.0",
     "react-native": "0.72.10",
+    "react-native-image-picker": "^8.2.1",
     "react-test-renderer": "18.2.0",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5"
   },
   "keywords": [
-    "creuto",
-    "creuto-ai",
     "react-native",
-    "splash-screen",
-    "react-native-splash",
-    "bootsplash",
-    "launch-screen",
-    "android-12-splash",
-    "ios-launchscreen",
-    "native-splash-screen",
-    "react-native-bootsplash-alternative",
-    "zero-flicker-splash",
-    "react-native-toolkit",
-    "mobile-app-development",
-    "product-engineering",
-    "typescript"
+    "image-picker",
+    "image-uploader",
+    "image-upload",
+    "camera",
+    "gallery",
+    "photo-picker",
+    "multi-image-picker",
+    "image-preview",
+    "image-compression",
+    "image-validation",
+    "react-native-image-picker",
+    "react-native-camera",
+    "react-native-image-crop-picker",
+    "expo-image-picker",
+    "media-picker",
+    "file-picker",
+    "photo-uploader",
+    "creuto",
+    "typescript",
+    "ios",
+    "android",
+    "mobile"
   ],
   "author": {
     "name": "Creuto — Leading Product Engineering Company",
@@ -84,10 +88,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Creuto/react-native-app-splash.git"
+    "url": "git+https://github.com/Creuto/react-native-image-uploader.git"
   },
   "bugs": {
-    "url": "https://github.com/Creuto/react-native-app-splash/issues"
+    "url": "https://github.com/Creuto/react-native-image-uploader/issues"
   },
-  "homepage": "https://github.com/Creuto/react-native-app-splash#readme"
+  "homepage": "https://github.com/Creuto/react-native-image-uploader#readme"
 }

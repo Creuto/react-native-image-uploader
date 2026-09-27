@@ -8,9 +8,10 @@
     "start": "react-native start"
   },
   "dependencies": {
-    "@creuto/react-native-app-splash": "..",
+    "@creuto/react-native-image-uploader": "..",
     "react": "18.2.0",
-    "react-native": "0.72.10"
+    "react-native": "0.72.10",
+    "react-native-image-picker": "^8.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

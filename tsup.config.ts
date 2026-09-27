@@ -7,5 +7,5 @@ export default defineConfig({
   clean: true,
   sourcemap: true,
   minify: false,
-  external: ['react', 'react-native'],
+  external: ['react', 'react-native', 'react-native-image-picker'],
 });

@@ -1,13 +1,13 @@
-# Contributing to @creuto/react-native-adaptive-ui
+# Contributing to @creuto/react-native-image-uploader
 
-Thank you for considering contributing to `@creuto/react-native-adaptive-ui`!
+Thank you for considering contributing to `@creuto/react-native-image-uploader`!
 
 ## Development Setup
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/creuto/react-native-adaptive-ui.git
-   cd react-native-adaptive-ui
+   git clone https://github.com/Creuto/react-native-image-uploader.git
+   cd react-native-image-uploader
    ```
 
 2. Install dependencies:
@@ -17,7 +17,7 @@ Thank you for considering contributing to `@creuto/react-native-adaptive-ui`!
 
 3. Run TypeScript type checks:
    ```bash
-   npm run type-check
+   npm run typecheck
    ```
 
 4. Run unit tests:
@@ -39,5 +39,6 @@ Thank you for considering contributing to `@creuto/react-native-adaptive-ui`!
 ## Pull Request Guidelines
 
 - Ensure all unit tests pass (`npm test`).
-- Keep runtime dependencies at zero.
-- Maintain strict accessibility principles: never force-disable accessibility font scaling (`allowFontScaling={false}`) to solve layout overflow.
+- Keep runtime dependencies minimal.
+- Maintain strict accessibility principles: accessible controls, proper roles and labels, adequate touch targets.
+- Uploading logic must remain application/backend owned (do not embed cloud provider SDKs into the package).

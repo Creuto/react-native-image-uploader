@@ -1,168 +1,328 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
+  Alert,
   SafeAreaView,
+  ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
-  View,
   TouchableOpacity,
-  ActivityIndicator,
+  View,
 } from 'react-native';
-import BootSplash, { VisibilityStatus } from '@creuto/react-native-app-splash';
+import {
+  ImageUploader,
+  pickImages,
+  takePhoto,
+  type ImageUploaderError,
+  type SelectedImage,
+} from '@creuto/react-native-image-uploader';
 
 export default function App() {
-  const [initializing, setInitializing] = useState(true);
-  const [status, setStatus] = useState<VisibilityStatus>('visible');
-  const [visible, setVisible] = useState(true);
+  const [multiImages, setMultiImages] = useState<SelectedImage[]>([]);
+  const [singleGalleryImage, setSingleGalleryImage] = useState<SelectedImage[]>([]);
+  const [singleCameraImage, setSingleCameraImage] = useState<SelectedImage[]>([]);
+  const [validatedImages, setValidatedImages] = useState<SelectedImage[]>([]);
+  const [programmaticImages, setProgrammaticImages] = useState<SelectedImage[]>([]);
+  const [logs, setLogs] = useState<string[]>([]);
 
-  const checkSplashStatus = async () => {
-    const isVis = await BootSplash.isVisible();
-    const currentStatus = await BootSplash.getVisibilityStatus();
-    setVisible(isVis);
-    setStatus(currentStatus);
+  const addLog = (msg: string) => {
+    setLogs((prev) => [`[${new Date().toLocaleTimeString()}] ${msg}`, ...prev.slice(0, 10)]);
   };
 
-  useEffect(() => {
-    async function initApp() {
-      // Simulate app initialization tasks (fetching token, loading cache, etc.)
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      await BootSplash.hide();
-      setInitializing(false);
-      await checkSplashStatus();
+  const handleProgrammaticPick = async () => {
+    try {
+      addLog('Triggered programmatic pickImages()...');
+      const results = await pickImages({
+        maxImages: 3,
+        maxFileSize: 5 * 1024 * 1024,
+        quality: 0.8,
+      });
+      setProgrammaticImages(results);
+      addLog(`Programmatic pick success: ${results.length} image(s)`);
+    } catch (err: any) {
+      addLog(`Programmatic pick error: ${err.message || String(err)}`);
     }
-
-    initApp();
-  }, []);
-
-  const handleHide = async () => {
-    await BootSplash.hide();
-    await checkSplashStatus();
   };
 
-  const handleShow = async () => {
-    await BootSplash.show();
-    await checkSplashStatus();
+  const handleProgrammaticCamera = async () => {
+    try {
+      addLog('Triggered programmatic takePhoto()...');
+      const photo = await takePhoto({ quality: 0.8 });
+      if (photo) {
+        setProgrammaticImages((prev) => [...prev, photo]);
+        addLog(`Programmatic camera success: ${photo.name || photo.uri}`);
+      }
+    } catch (err: any) {
+      addLog(`Programmatic camera error: ${err.message || String(err)}`);
+    }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>@creuto/react-native-app-splash</Text>
-        <Text style={styles.subtitle}>Example Application</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.badge}>PRODUCTION READY</Text>
+          <Text style={styles.title}>@creuto/react-native-image-uploader</Text>
+          <Text style={styles.subtitle}>
+            Local image picking, camera capture, validation, previewing & preparation.
+          </Text>
+        </View>
 
-        {initializing ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#0066FF" />
-            <Text style={styles.loadingText}>Initializing application state...</Text>
+        {/* Demo 1: Multiple Images + Reordering + Both Sources */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>1. Multiple Images & Reordering</Text>
+          <Text style={styles.cardDescription}>
+            Gallery + Camera support. Max 5 images, 5MB limit, 80% compression quality.
+          </Text>
+
+          <ImageUploader
+            images={multiImages}
+            onChange={setMultiImages}
+            maxImages={5}
+            maxFileSize={5 * 1024 * 1024}
+            compressionQuality={0.8}
+            allowReorder
+            source="both"
+            onSelect={(selected) => addLog(`Selected ${selected.length} image(s)`)}
+            onRemove={(img, idx) => addLog(`Removed image at index ${idx}`)}
+            onError={(err: ImageUploaderError) => addLog(`Error [${err.code}]: ${err.message}`)}
+            onPermissionDenied={(src) => addLog(`Permission denied for ${src}`)}
+          />
+
+          <View style={styles.infoBox}>
+            <Text style={styles.infoText}>
+              Selected Count: {multiImages.length} / 5
+            </Text>
           </View>
-        ) : (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Splash Screen Status</Text>
-            <Text style={styles.statusText}>Is Visible: {visible ? 'YES' : 'NO'}</Text>
-            <Text style={styles.statusText}>Visibility Status: {status.toUpperCase()}</Text>
+        </View>
 
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.button} onPress={handleHide}>
-                <Text style={styles.buttonText}>Hide Splash</Text>
-              </TouchableOpacity>
+        {/* Demo 2: Single Image (Gallery Only) */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>2. Gallery Only (Single Image)</Text>
+          <Text style={styles.cardDescription}>
+            source="gallery", maxImages=1
+          </Text>
 
-              <TouchableOpacity style={[styles.button, styles.secondaryButton]} onPress={handleShow}>
-                <Text style={styles.buttonText}>Show Splash</Text>
-              </TouchableOpacity>
-            </View>
+          <ImageUploader
+            images={singleGalleryImage}
+            onChange={setSingleGalleryImage}
+            source="gallery"
+            maxImages={1}
+            onSelect={(selected) => addLog(`Single gallery photo: ${selected[0]?.name}`)}
+            onError={(err) => addLog(`Error: ${err.message}`)}
+          />
+        </View>
 
-            <TouchableOpacity style={styles.refreshButton} onPress={checkSplashStatus}>
-              <Text style={styles.refreshButtonText}>Refresh Status</Text>
+        {/* Demo 3: Single Image (Camera Only) */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>3. Camera Only (Single Photo)</Text>
+          <Text style={styles.cardDescription}>
+            source="camera", maxImages=1
+          </Text>
+
+          <ImageUploader
+            images={singleCameraImage}
+            onChange={setSingleCameraImage}
+            source="camera"
+            maxImages={1}
+            onSelect={(selected) => addLog(`Camera photo captured: ${selected[0]?.name}`)}
+            onError={(err) => addLog(`Camera Error: ${err.message}`)}
+          />
+        </View>
+
+        {/* Demo 4: Type & Dimension Validation */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>4. Type Validation (JPEG/PNG only)</Text>
+          <Text style={styles.cardDescription}>
+            allowedTypes: ['image/jpeg', 'image/png'], maxFileSize: 2MB
+          </Text>
+
+          <ImageUploader
+            images={validatedImages}
+            onChange={setValidatedImages}
+            allowedTypes={['image/jpeg', 'image/png']}
+            maxFileSize={2 * 1024 * 1024}
+            maxWidth={3000}
+            maxHeight={3000}
+            onError={(err) => addLog(`Validation Failure: ${err.message}`)}
+          />
+        </View>
+
+        {/* Demo 5: Programmatic Utility API */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>5. Programmatic API</Text>
+          <Text style={styles.cardDescription}>
+            Call pickImages() or takePhoto() programmatically without UI component.
+          </Text>
+
+          <View style={styles.buttonRow}>
+            <TouchableOpacity style={styles.actionBtn} onPress={handleProgrammaticPick}>
+              <Text style={styles.actionBtnText}>Pick Images API</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.actionBtn, styles.cameraBtn]} onPress={handleProgrammaticCamera}>
+              <Text style={styles.actionBtnText}>Take Photo API</Text>
             </TouchableOpacity>
           </View>
-        )}
-      </View>
+
+          {programmaticImages.length > 0 && (
+            <View style={styles.resultList}>
+              {programmaticImages.map((img, i) => (
+                <Text key={i} style={styles.resultItem}>
+                  {i + 1}. {img.name} ({( (img.size || 0) / 1024 ).toFixed(1)} KB)
+                </Text>
+              ))}
+            </View>
+          )}
+        </View>
+
+        {/* Activity & Event Log */}
+        <View style={styles.card}>
+          <View style={styles.logHeader}>
+            <Text style={styles.cardTitle}>Event Logs</Text>
+            <TouchableOpacity onPress={() => setLogs([])}>
+              <Text style={styles.clearLogsText}>Clear</Text>
+            </TouchableOpacity>
+          </View>
+
+          {logs.length === 0 ? (
+            <Text style={styles.emptyLog}>No events logged yet. Perform actions above.</Text>
+          ) : (
+            logs.map((log, index) => (
+              <Text key={index} style={styles.logText}>
+                {log}
+              </Text>
+            ))
+          )}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    backgroundColor: '#F5F7FA',
+    backgroundColor: '#F9FAFB',
   },
-  content: {
-    flex: 1,
-    padding: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
+  scrollContent: {
+    padding: 16,
+  },
+  header: {
+    marginBottom: 20,
+    marginTop: 8,
+  },
+  badge: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#EEF2FF',
+    color: '#4F46E5',
+    fontSize: 11,
+    fontWeight: '700',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    marginBottom: 8,
+    overflow: 'hidden',
   },
   title: {
     fontSize: 22,
-    fontWeight: '700',
-    color: '#1A202C',
-    textAlign: 'center',
+    fontWeight: '800',
+    color: '#111827',
+    marginBottom: 4,
   },
   subtitle: {
-    fontSize: 15,
-    color: '#718096',
-    marginTop: 4,
-    marginBottom: 24,
-  },
-  loadingContainer: {
-    alignItems: 'center',
-    marginVertical: 32,
-  },
-  loadingText: {
-    marginTop: 12,
     fontSize: 14,
-    color: '#4A5568',
+    color: '#6B7280',
+    lineHeight: 20,
   },
   card: {
-    width: '100%',
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    padding: 20,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
   },
   cardTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#2D3748',
+    fontWeight: '700',
+    color: '#1F2937',
+    marginBottom: 4,
+  },
+  cardDescription: {
+    fontSize: 13,
+    color: '#6B7280',
     marginBottom: 12,
   },
-  statusText: {
-    fontSize: 14,
-    color: '#4A5568',
-    marginVertical: 4,
+  infoBox: {
+    marginTop: 10,
+    padding: 8,
+    backgroundColor: '#F3F4F6',
+    borderRadius: 6,
   },
-  buttonContainer: {
+  infoText: {
+    fontSize: 12,
+    color: '#374151',
+    fontWeight: '500',
+  },
+  buttonRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 16,
+    gap: 8,
   },
-  button: {
+  actionBtn: {
     flex: 1,
-    backgroundColor: '#0066FF',
-    paddingVertical: 12,
+    backgroundColor: '#4F46E5',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
     borderRadius: 8,
     alignItems: 'center',
-    marginHorizontal: 4,
   },
-  secondaryButton: {
-    backgroundColor: '#4A5568',
+  cameraBtn: {
+    backgroundColor: '#059669',
   },
-  buttonText: {
+  actionBtnText: {
     color: '#FFFFFF',
     fontWeight: '600',
-    fontSize: 14,
+    fontSize: 13,
   },
-  refreshButton: {
+  resultList: {
     marginTop: 12,
-    paddingVertical: 10,
-    alignItems: 'center',
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#F3F4F6',
   },
-  refreshButtonText: {
-    color: '#0066FF',
-    fontWeight: '500',
-    fontSize: 14,
+  resultItem: {
+    fontSize: 12,
+    color: '#4B5563',
+    marginBottom: 4,
+  },
+  logHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  clearLogsText: {
+    fontSize: 12,
+    color: '#EF4444',
+    fontWeight: '600',
+  },
+  emptyLog: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    fontStyle: 'italic',
+  },
+  logText: {
+    fontSize: 11,
+    color: '#374151',
+    fontFamily: 'Platform' === 'ios' ? 'Menlo' : 'monospace',
+    marginBottom: 4,
   },
 });
