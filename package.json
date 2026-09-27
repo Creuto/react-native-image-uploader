@@ -1,7 +1,7 @@
 {
-  "name": "@creuto/react-native-adaptive-ui",
-  "version": "0.1.2",
-  "description": "Accessibility-first adaptive UI layout toolkit for React Native by Creuto — A leading product engineering company creating adaptive software solutions.",
+  "name": "@creuto/react-native-app-splash",
+  "version": "0.1.0",
+  "description": "High-performance, lightweight native splash screen solution for React Native apps by Creuto. Seamless Android 12+ and iOS launch screen control with zero flicker.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -14,13 +14,19 @@
   },
   "files": [
     "dist",
+    "src",
+    "android",
+    "!android/.gradle",
+    "!android/build",
+    "ios",
+    "RNAppSplash.podspec",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
   ],
   "scripts": {
     "build": "tsup",
-    "type-check": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint 'src/**/*.{ts,tsx}' '__tests__/**/*.{ts,tsx}'",
     "format": "prettier --write 'src/**/*.{ts,tsx}' '__tests__/**/*.{ts,tsx}'",
     "format:check": "prettier --check 'src/**/*.{ts,tsx}' '__tests__/**/*.{ts,tsx}'",
@@ -57,31 +63,31 @@
     "creuto",
     "creuto-ai",
     "react-native",
-    "react-native-adaptive-ui",
-    "accessibility",
-    "font scaling",
-    "adaptive UI",
-    "responsive UI",
-    "dynamic type",
-    "large text",
-    "mobile accessibility",
-    "mobile app development",
-    "custom software development",
-    "product engineering",
-    "a11y",
-    "react native toolkit"
+    "splash-screen",
+    "react-native-splash",
+    "bootsplash",
+    "launch-screen",
+    "android-12-splash",
+    "ios-launchscreen",
+    "native-splash-screen",
+    "react-native-bootsplash-alternative",
+    "zero-flicker-splash",
+    "react-native-toolkit",
+    "mobile-app-development",
+    "product-engineering",
+    "typescript"
   ],
   "author": {
-    "name": "Creuto",
+    "name": "Creuto — Leading Product Engineering Company",
     "url": "https://creuto.com"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Creuto/react-native-adaptive-ui.git"
+    "url": "git+https://github.com/Creuto/react-native-app-splash.git"
   },
   "bugs": {
-    "url": "https://github.com/Creuto/react-native-adaptive-ui/issues"
+    "url": "https://github.com/Creuto/react-native-app-splash/issues"
   },
-  "homepage": "https://creuto.com"
+  "homepage": "https://github.com/Creuto/react-native-app-splash#readme"
 }

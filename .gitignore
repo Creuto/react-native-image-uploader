@@ -1,9 +1,14 @@
 # Dependencies
 node_modules/
+example/node_modules/
 
 # Build artifacts
 dist/
 *.tsbuildinfo
+android/.gradle/
+android/build/
+ios/Pods/
+ios/build/
 
 # Test & coverage
 coverage/
