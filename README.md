@@ -2,6 +2,8 @@
 
 > The ultimate production-grade React Native image picker, camera capture, preview, reordering, validation, and preparation library for iOS and Android.
 
+![Component UI Preview](https://raw.githubusercontent.com/Creuto/react-native-image-uploader/main/docs/preview.jpg)
+
 `@creuto/react-native-image-uploader` provides an all-in-one, highly customizable solution for selecting photos from the device gallery or capturing photos with the camera, displaying responsive thumbnail previews, validating image sizes and file types, and compressing images locally.
 
 Zero backend vendor lock-in. Works seamlessly with any API, server, GraphQL, AWS S3, Cloudinary, Firebase, Supabase, or custom backend.

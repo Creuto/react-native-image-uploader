@@ -1,6 +1,6 @@
 {
   "name": "@creuto/react-native-image-uploader",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Powerful, customizable React Native image picker, camera capture, preview, reordering, validation, and local compression library for iOS and Android. High-performance alternative to react-native-image-crop-picker and expo-image-picker.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -15,6 +15,7 @@
   "files": [
     "dist",
     "src",
+    "docs",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
